@@ -621,7 +621,7 @@ function renderVideoSection(dk, ei) {
   let previewHtml = '';
   if(url && isDirectVideo(url)) {
     previewHtml = `<div class="video-embed-wrap">
-        <div style="position:relative;border-radius:12px;overflow:hidden;background:#000;">
+        <div style="position:relative;border-radius:12px;overflow:hidden;background:#000;"><div style="position:absolute;top:0;right:0;width:90px;height:90px;background:#000;z-index:2;pointer-events:none;border-bottom-left-radius:8px;"></div>
         <video controls autoplay muted playsinline preload="auto" loop style="width:100%;display:block;max-height:320px;">
           <source src="${url}" type="video/mp4">
         </video>
