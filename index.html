@@ -438,6 +438,57 @@
     transition: all 0.15s;
   }
   .reset-no:hover { background: var(--bg3); }
+
+  /* CELEBRATION */
+  #celebrationOverlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 9999;
+    align-items: center; justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+  #celebrationOverlay.show { display: flex; }
+  .celeb-title {
+    font-size: 64px; font-weight: 900;
+    background: linear-gradient(135deg, #00e5a0, #00ffc2, #ffe600, #ff6b35);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: celebPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+    line-height: 1.1; margin-bottom: 12px;
+  }
+  .celeb-sub {
+    font-size: 22px; color: #fff; font-weight: 700;
+    animation: celebPop 0.6s 0.15s cubic-bezier(0.34,1.56,0.64,1) both;
+    margin-bottom: 8px;
+  }
+  .celeb-emoji {
+    font-size: 48px;
+    animation: celebPop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    margin-bottom: 32px;
+  }
+  .celeb-close {
+    background: var(--accent);
+    border: none; border-radius: 14px;
+    padding: 14px 40px;
+    font-size: 16px; font-weight: 900; color: #000;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    animation: celebPop 0.6s 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+    transition: transform 0.15s;
+  }
+  .celeb-close:hover { transform: scale(1.05); }
+  @keyframes celebPop {
+    from { opacity:0; transform: scale(0.5); }
+    to { opacity:1; transform: scale(1); }
+  }
+  #confettiCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+  }
 </style>
 </head>
 <body>
@@ -629,17 +680,44 @@ function ytId(url) {
   return m ? m[1] : null;
 }
 
+function checkDayComplete(dk) {
+  const day = DAYS.find(d=>d.key===dk);
+  if(!day||day.rest) return false;
+  return day.exercises.every((_,ei)=>[0,1,2].every(si=>state.sets[setKey(dk,ei,si)]));
+}
+
 function handleSetClick(dk, ei, si) {
   if(state.sets[setKey(dk,ei,si)]) return;
   const prev = si===0 || state.sets[setKey(dk,ei,si-1)];
   if(!prev) return;
+
   state.sets[setKey(dk,ei,si)] = true;
   saveState();
-  const nextSi = si+1;
-  if(nextSi < SETS) {
-    startTimer(()=>render(), `الجلسة ${nextSi+1} من التمرين`);
-  } else {
+
+  const day = DAYS.find(d=>d.key===dk);
+  const isLastSet = si === SETS - 1;
+  const isLastExercise = ei === day.exercises.length - 1;
+
+  if(!isLastSet) {
+    // راحة بين الجلسات
     render();
+    startTimer(()=>{ render(); }, `الجلسة ${si+2} من التمرين`);
+  } else if(!isLastExercise) {
+    // انتهت جلسات هذا التمرين → راحة ثم انتقال للتمرين التالي
+    render();
+    startTimer(()=>{
+      state.openEx = dk + '_' + (ei + 1);
+      saveState();
+      render();
+      setTimeout(()=>{
+        const el = document.getElementById('exc_' + dk + '_' + (ei+1));
+        if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+      }, 200);
+    }, 'التمرين التالي 💪');
+  } else {
+    // اكتمل اليوم كله!
+    render();
+    setTimeout(()=> showCelebration(dk), 500);
   }
 }
 
@@ -829,5 +907,93 @@ function resetAll() {
     </div>
   </div>
 </div>
+
+<canvas id="confettiCanvas" style="display:none;"></canvas>
+<div id="celebrationOverlay">
+  <div class="celeb-title" id="celebTitle">بطل! 🏆</div>
+  <div class="celeb-sub" id="celebSub">أكملت تمارين اليوم كاملة!</div>
+  <div class="celeb-emoji">🔥💪🎉</div>
+  <button class="celeb-close" onclick="closeCelebration()">شكراً، أنا الأفضل! 😎</button>
+</div>
+
+<script>
+const CELEB_MESSAGES = [
+  { title: 'وحش! 🔥', sub: 'ما في أحد مثلك، أكملت اليوم كله!' },
+  { title: 'بطل! 🏆', sub: 'أسد! أكملت جميع التمارين!' },
+  { title: 'أسطورة! ⚡', sub: 'الألم مؤقت، الفخر إلى الأبد!' },
+  { title: 'ملك! 👑', sub: 'تمرين كامل 100%، ما شاء الله!' },
+  { title: 'قوة خرافية! 💥', sub: 'أكملت اليوم كله بدون توقف!' },
+];
+
+function showCelebration(dk) {
+  const msg = CELEB_MESSAGES[Math.floor(Math.random() * CELEB_MESSAGES.length)];
+  document.getElementById('celebTitle').textContent = msg.title;
+  document.getElementById('celebSub').textContent = msg.sub;
+  document.getElementById('celebrationOverlay').classList.add('show');
+  startConfetti();
+}
+
+function closeCelebration() {
+  document.getElementById('celebrationOverlay').classList.remove('show');
+  stopConfetti();
+}
+
+// CONFETTI
+let confettiAnim = null;
+let confettiParticles = [];
+
+function startConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.style.display = 'block';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  confettiParticles = [];
+  const colors = ['#00e5a0','#ffe600','#ff6b35','#ff3cac','#00cfff','#a855f7','#fff'];
+
+  for(let i=0;i<180;i++) {
+    confettiParticles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random()*10+5,
+      h: Math.random()*6+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*360,
+      vx: (Math.random()-0.5)*4,
+      vy: Math.random()*4+2,
+      vr: (Math.random()-0.5)*6,
+      shape: Math.random()>0.5?'rect':'circle',
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettiParticles.forEach(p=>{
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillStyle = p.color;
+      if(p.shape==='circle') {
+        ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.fill();
+      } else {
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      }
+      ctx.restore();
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      if(p.y > canvas.height+20) { p.y = -20; p.x = Math.random()*canvas.width; }
+    });
+    confettiAnim = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function stopConfetti() {
+  if(confettiAnim) cancelAnimationFrame(confettiAnim);
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.style.display = 'none';
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+</script>
 </body>
 </html>
