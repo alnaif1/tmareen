@@ -489,6 +489,21 @@
     pointer-events: none;
     z-index: 9998;
   }
+
+  .quick-reset-btn {
+    margin-top: 14px;
+    background: transparent;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 20px;
+    padding: 7px 20px;
+    color: #ff8080;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quick-reset-btn:hover { background: rgba(255,80,80,0.1); border-color: rgba(255,80,80,0.6); }
 </style>
 </head>
 <body>
@@ -513,7 +528,13 @@
   <header>
     <div class="logo-ring">🏋️</div>
     <h1>جدول تمارين الدامبل المنزلي</h1>
-    <p>٥ تمارين · ٣ جلسات: ٨-١٠-١٢ عدة · ٣٠ ثانية راحة</p>
+    <p>٦ تمارين · ٣ جلسات: ٨-١٠-١٢ عدة · ٣٠ ثانية راحة</p>
+    <button class="quick-reset-btn" onclick="showResetConfirm()">🔄 إعادة التمارين</button>
+    <div class="reset-confirm" id="resetConfirm">
+      <div>هل أنت متأكد؟ سيتم مسح كل التقدم</div>
+      <button class="reset-yes" onclick="resetAll()">نعم، ابدأ من جديد</button>
+      <button class="reset-no" onclick="hideResetConfirm()">إلغاء</button>
+    </div>
   </header>
 
   <div class="week-strip" id="weekStrip"></div>
@@ -535,7 +556,7 @@ const DAYS = [
     name:'تمرين يوم الأحد', color:'accent',
     exercises:[
       'التمرين الأول','التمرين الثاني','التمرين الثالث',
-      'التمرين الرابع','التمرين الخامس'
+      'التمرين الرابع','التمرين الخامس','التمرين السادس'
     ]
   },
   {
@@ -543,7 +564,7 @@ const DAYS = [
     name:'تمرين يوم الاثنين', color:'accent',
     exercises:[
       'التمرين الأول','التمرين الثاني','التمرين الثالث',
-      'التمرين الرابع','التمرين الخامس'
+      'التمرين الرابع','التمرين الخامس','التمرين السادس'
     ]
   },
   {
@@ -555,7 +576,7 @@ const DAYS = [
     name:'تمرين يوم الأربعاء', color:'accent',
     exercises:[
       'التمرين الأول','التمرين الثاني','التمرين الثالث',
-      'التمرين الرابع','التمرين الخامس'
+      'التمرين الرابع','التمرين الخامس','التمرين السادس'
     ]
   },
   {
@@ -563,7 +584,7 @@ const DAYS = [
     name:'تمرين يوم الخميس', color:'accent',
     exercises:[
       'التمرين الأول','التمرين الثاني','التمرين الثالث',
-      'التمرين الرابع','التمرين الخامس'
+      'التمرين الرابع','التمرين الخامس','التمرين السادس'
     ]
   },
   {
@@ -592,27 +613,29 @@ if(!state.sets) state.sets = {};
 if(!state.videos) state.videos = {};
 // الأحد والأربعاء - نفس التمارين
 const sunWedVideos = [
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/3.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/2.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/1.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/3.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/1.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/1.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/2.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/3.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/4.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/5.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/6.mov',
 ];
 sunWedVideos.forEach((v,i)=>{
-  if(!state.videos['sun_'+i]) state.videos['sun_'+i] = v;
-  if(!state.videos['wed_'+i]) state.videos['wed_'+i] = v;
+  state.videos['sun_'+i] = v;
+  state.videos['wed_'+i] = v;
 });
 // الاثنين والخميس - نفس التمارين
 const monThuVideos = [
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/2.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/1.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/6.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/1.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/4.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/1.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/2.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/3.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/4.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/5.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/6.mov',
 ];
 monThuVideos.forEach((v,i)=>{
-  if(!state.videos['mon_'+i]) state.videos['mon_'+i] = v;
-  if(!state.videos['thu_'+i]) state.videos['thu_'+i] = v;
+  state.videos['mon_'+i] = v;
+  state.videos['thu_'+i] = v;
 });
 if(!state.openEx) state.openEx = null;
 if(!state.names) state.names = {};
@@ -884,18 +907,7 @@ function resetAll() {
 }
 </script>
 
-<div class="container" style="padding-bottom:40px;">
-  <div class="reset-section">
-    <button class="reset-btn" onclick="showResetConfirm()">
-      🔄 إعادة التمارين من البداية
-    </button>
-    <div class="reset-confirm" id="resetConfirm">
-      <div>هل أنت متأكد؟ سيتم مسح كل التقدم</div>
-      <button class="reset-yes" onclick="resetAll()">نعم، ابدأ من جديد</button>
-      <button class="reset-no" onclick="hideResetConfirm()">إلغاء</button>
-    </div>
-  </div>
-</div>
+
 
 <canvas id="confettiCanvas" style="display:none;"></canvas>
 <div id="celebrationOverlay">
