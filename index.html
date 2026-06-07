@@ -513,7 +513,7 @@
   <header>
     <div class="logo-ring">🏋️</div>
     <h1>جدول تمارين الدامبل المنزلي</h1>
-    <p>٣ جلسات: ٨ - ١٠ - ١٢ عدة · ٣٠ ثانية راحة</p>
+    <p>٥ تمارين · ٣ جلسات: ٨-١٠-١٢ عدة · ٣٠ ثانية راحة</p>
   </header>
 
   <div class="week-strip" id="weekStrip"></div>
@@ -532,19 +532,18 @@
 const DAYS = [
   {
     key:'sun', short:'الأحد', icon:'💪', rest:false,
-    name:'تمارين الأكتاف', color:'accent',
+    name:'تمرين يوم الأحد', color:'accent',
     exercises:[
-      'تمرين الأكتاف ١','تمرين الأكتاف ٢','تمرين الأكتاف ٣',
-      'تمرين الأكتاف ٤','تمرين الأكتاف ٥','تمرين الأكتاف ٦','تمرين الأكتاف ٧'
+      'التمرين الأول','التمرين الثاني','التمرين الثالث',
+      'التمرين الرابع','التمرين الخامس'
     ]
   },
   {
     key:'mon', short:'الاثنين', icon:'💪', rest:false,
-    name:'تمارين الباي والتراي', color:'accent',
+    name:'تمرين يوم الاثنين', color:'accent',
     exercises:[
-      'تمرين الباي ١','تمرين الباي ٢','تمرين الباي ٣',
-      'تمرين الباي ٤','تمرين الباي ٥','تمرين الباي ٦',
-      'تمرين التراي ١','تمرين التراي ٢','تمرين التراي ٣'
+      'التمرين الأول','التمرين الثاني','التمرين الثالث',
+      'التمرين الرابع','التمرين الخامس'
     ]
   },
   {
@@ -553,18 +552,18 @@ const DAYS = [
   },
   {
     key:'wed', short:'الأربعاء', icon:'💪', rest:false,
-    name:'تمارين الصدر', color:'accent',
+    name:'تمرين يوم الأربعاء', color:'accent',
     exercises:[
-      'تمرين الصدر ١','تمرين الصدر ٢','تمرين الصدر ٣',
-      'تمرين الصدر ٤','تمرين الصدر ٥','تمرين الصدر ٦'
+      'التمرين الأول','التمرين الثاني','التمرين الثالث',
+      'التمرين الرابع','التمرين الخامس'
     ]
   },
   {
     key:'thu', short:'الخميس', icon:'💪', rest:false,
-    name:'تمارين الظهر', color:'accent',
+    name:'تمرين يوم الخميس', color:'accent',
     exercises:[
-      'تمرين الظهر ١','تمرين الظهر ٢','تمرين الظهر ٣',
-      'تمرين الظهر ٤','تمرين الظهر ٥','تمرين الظهر ٦','تمرين الظهر ٧'
+      'التمرين الأول','التمرين الثاني','التمرين الثالث',
+      'التمرين الرابع','التمرين الخامس'
     ]
   },
   {
@@ -591,40 +590,30 @@ let state = loadState();
 if(!state.activeDay && state.activeDay !== 0) state.activeDay = 0;
 if(!state.sets) state.sets = {};
 if(!state.videos) state.videos = {};
-// أكتاف
-if(!state.videos['sun_0']) state.videos['sun_0'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/1.mp4';
-if(!state.videos['sun_1']) state.videos['sun_1'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/2.mp4';
-if(!state.videos['sun_2']) state.videos['sun_2'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/3.mp4';
-if(!state.videos['sun_3']) state.videos['sun_3'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/4.mp4';
-if(!state.videos['sun_4']) state.videos['sun_4'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/5.mp4';
-if(!state.videos['sun_5']) state.videos['sun_5'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/6.mp4';
-if(!state.videos['sun_6']) state.videos['sun_6'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/7.mp4';
-// باي
-if(!state.videos['mon_0']) state.videos['mon_0'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/1.mp4';
-if(!state.videos['mon_1']) state.videos['mon_1'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/2.mp4';
-if(!state.videos['mon_2']) state.videos['mon_2'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/3.mp4';
-if(!state.videos['mon_3']) state.videos['mon_3'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/4.mp4';
-if(!state.videos['mon_4']) state.videos['mon_4'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/5.mp4';
-if(!state.videos['mon_5']) state.videos['mon_5'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/6.mp4';
-// تراي
-if(!state.videos['mon_6']) state.videos['mon_6'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/1.mp4';
-if(!state.videos['mon_7']) state.videos['mon_7'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/2.mp4';
-if(!state.videos['mon_8']) state.videos['mon_8'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/3.mp4';
-// صدر
-if(!state.videos['wed_0']) state.videos['wed_0'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/1.mp4';
-if(!state.videos['wed_1']) state.videos['wed_1'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/2.mov';
-if(!state.videos['wed_2']) state.videos['wed_2'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/3.mp4';
-if(!state.videos['wed_3']) state.videos['wed_3'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/4.mp4';
-if(!state.videos['wed_4']) state.videos['wed_4'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/5.mov';
-if(!state.videos['wed_5']) state.videos['wed_5'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/6.mp4';
-// ظهر
-if(!state.videos['thu_0']) state.videos['thu_0'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/1.mp4';
-if(!state.videos['thu_1']) state.videos['thu_1'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/2.mp4';
-if(!state.videos['thu_2']) state.videos['thu_2'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/3.mp4';
-if(!state.videos['thu_3']) state.videos['thu_3'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/4.mp4';
-if(!state.videos['thu_4']) state.videos['thu_4'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/5.mp4';
-if(!state.videos['thu_5']) state.videos['thu_5'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/6.mp4';
-if(!state.videos['thu_6']) state.videos['thu_6'] = 'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/7.mp4';
+// الأحد والأربعاء - نفس التمارين
+const sunWedVideos = [
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/3.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/2.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/1.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Tri/3.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sadeer/1.mp4',
+];
+sunWedVideos.forEach((v,i)=>{
+  if(!state.videos['sun_'+i]) state.videos['sun_'+i] = v;
+  if(!state.videos['wed_'+i]) state.videos['wed_'+i] = v;
+});
+// الاثنين والخميس - نفس التمارين
+const monThuVideos = [
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/2.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Bay/1.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Aktaf/6.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/1.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Dhaheer/4.mp4',
+];
+monThuVideos.forEach((v,i)=>{
+  if(!state.videos['mon_'+i]) state.videos['mon_'+i] = v;
+  if(!state.videos['thu_'+i]) state.videos['thu_'+i] = v;
+});
 if(!state.openEx) state.openEx = null;
 if(!state.names) state.names = {};
 
