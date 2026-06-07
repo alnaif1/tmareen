@@ -513,7 +513,7 @@
   <header>
     <div class="logo-ring">🏋️</div>
     <h1>جدول تمارين الدامبل المنزلي</h1>
-    <p>٣ جلسات · ١٢ عدة · ٣٠ ثانية راحة</p>
+    <p>٣ جلسات: ٨ - ١٠ - ١٢ عدة · ٣٠ ثانية راحة</p>
   </header>
 
   <div class="week-strip" id="weekStrip"></div>
@@ -577,7 +577,7 @@ const DAYS = [
   }
 ];
 
-const SETS = 3, REPS = 12, REST_SEC = 30;
+const SETS = 3, REPS = [8, 10, 12], REST_SEC = 30;
 const CIRC = 2 * Math.PI * 54;
 
 function loadState() {
@@ -722,7 +722,7 @@ function handleSetClick(dk, ei, si) {
 }
 
 function renderSets(dk, ei) {
-  let html = '<div class="sets-title">الجلسات</div><div class="sets-row">';
+  let html = '<div class="sets-title">الجلسات (٨ - ١٠ - ١٢ عدة)</div><div class="sets-row">';
   for(let si=0;si<SETS;si++){
     const done = state.sets[setKey(dk,ei,si)];
     const prevDone = si===0 || state.sets[setKey(dk,ei,si-1)];
@@ -735,7 +735,7 @@ function renderSets(dk, ei) {
     const statusText = done ? '✓ تمت' : isActive ? 'اضغط' : '🔒';
     html += `<div class="${cls}" onclick="handleSetClick('${dk}',${ei},${si})">
       <div class="tile-num">الجلسة ${si+1}</div>
-      <div class="tile-reps">${REPS}</div>
+      <div class="tile-reps">${REPS[si]}</div>
       <div class="tile-status">${statusText}</div>
     </div>`;
   }
@@ -821,7 +821,7 @@ function renderDay() {
         <div class="ex-badge">${allDone ? '✓' : ei+1}</div>
         <div class="ex-label">
           <div class="ex-name" title="${name}">${name}</div>
-          <div class="ex-sub">${SETS} جلسات × ${REPS} عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
+          <div class="ex-sub">${SETS} جلسات: ٨-١٠-١٢ عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
         </div>
         <div class="ex-arrow">▾</div>
       </div>`;
