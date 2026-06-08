@@ -528,7 +528,7 @@
   <header>
     <div class="logo-ring">🏋️</div>
     <h1>جدول تمارين الدامبل المنزلي</h1>
-    <p>٦ تمارين · ٣ جلسات: ٨-١٠-١٢ عدة · ٣٠ ثانية راحة</p>
+    <p>٦ تمارين · ٣ جلسات: 10-10-10 عدة · 45 ثانية راحة</p>
     <button class="quick-reset-btn" onclick="showResetConfirm()">🔄 إعادة التمارين</button>
     <div class="reset-confirm" id="resetConfirm">
       <div>هل أنت متأكد؟ سيتم مسح كل التقدم</div>
@@ -734,7 +734,7 @@ function handleSetClick(dk, ei, si) {
 }
 
 function renderSets(dk, ei) {
-  let html = '<div class="sets-title">الجلسات (٨ - ١٠ - ١٢ عدة)</div><div class="sets-row">';
+  let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
   for(let si=0;si<SETS;si++){
     const done = state.sets[setKey(dk,ei,si)];
     const prevDone = si===0 || state.sets[setKey(dk,ei,si-1)];
@@ -833,7 +833,7 @@ function renderDay() {
         <div class="ex-badge">${allDone ? '✓' : ei+1}</div>
         <div class="ex-label">
           <div class="ex-name" title="${name}">${name}</div>
-          <div class="ex-sub">${SETS} جلسات: ٨-١٠-١٢ عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
+          <div class="ex-sub">${SETS} جلسات: 10-10-10 عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
         </div>
         <div class="ex-arrow">▾</div>
       </div>`;
