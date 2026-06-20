@@ -274,6 +274,13 @@
   .set-tile.active-tile .tile-status { color: var(--accent); }
   .set-tile.done-tile .tile-status { color: var(--accent2); }
 
+  .start-hint {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted2);
+    font-weight: 500;
+  }
   .all-done-badge {
     display: flex; align-items: center; justify-content: center; gap: 8px;
     margin-top: 12px;
@@ -453,21 +460,33 @@
   #celebrationOverlay.show { display: flex; }
   .celeb-title {
     font-size: 64px; font-weight: 900;
-    background: linear-gradient(135deg, #00e5a0, #00ffc2, #ffe600, #ff6b35);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: celebPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
     line-height: 1.1; margin-bottom: 12px;
+    animation: celebPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    opacity: 1;
+  }
+  .celeb-icon {
+    font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+    -webkit-text-fill-color: initial;
+    color: initial;
+  }
+  .celeb-title-text {
+    color: var(--accent3);
+    background: linear-gradient(135deg, #00e5a0, #00ffc2, #ffe600, #ff6b35);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .celeb-sub {
     font-size: 22px; color: #fff; font-weight: 700;
-    animation: celebPop 0.6s 0.15s cubic-bezier(0.34,1.56,0.64,1) both;
+    animation: celebPop 0.6s 0.15s cubic-bezier(0.34,1.56,0.64,1) forwards;
     margin-bottom: 8px;
+    opacity: 1;
   }
   .celeb-emoji {
     font-size: 48px;
-    animation: celebPop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    animation: celebPop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
     margin-bottom: 32px;
+    opacity: 1;
   }
   .celeb-close {
     background: var(--accent);
@@ -476,8 +495,9 @@
     font-size: 16px; font-weight: 900; color: #000;
     cursor: pointer;
     font-family: 'Tajawal', sans-serif;
-    animation: celebPop 0.6s 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+    animation: celebPop 0.6s 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
     transition: transform 0.15s;
+    opacity: 1;
   }
   .celeb-close:hover { transform: scale(1.05); }
   @keyframes celebPop {
@@ -504,9 +524,64 @@
     transition: all 0.2s;
   }
   .quick-reset-btn:hover { background: rgba(255,80,80,0.1); border-color: rgba(255,80,80,0.6); }
+
+  /* STICKY WORKOUT STOPWATCH */
+  #stickyTimer {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    background: rgba(15,18,24,0.9);
+    border: 1px solid var(--border2);
+    border-radius: 36px;
+    padding: 12px 26px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  #stickyTimer.show { display: flex; }
+  #stickyTimer .st-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent);
+    animation: stPulse 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  #stickyTimer.idle .st-dot { background: var(--muted2); animation: none; }
+  @keyframes stPulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+  #stickyTimer .st-label { font-size: 13px; color: var(--muted); font-weight: 500; }
+  #stickyTimer .st-time { font-size: 26px; font-weight: 900; color: var(--accent); direction: ltr; min-width: 78px; text-align: center; letter-spacing: 0.5px; }
+  #stickyTimer .st-start-btn {
+    background: var(--accent);
+    border: none; border-radius: 24px;
+    padding: 9px 22px;
+    font-size: 14px; font-weight: 800; color: #000;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    transition: transform 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  #stickyTimer .st-start-btn:hover { background: var(--accent3); transform: scale(1.04); }
+  @media (max-width: 500px) {
+    #stickyTimer { top: 10px; padding: 10px 18px; gap: 10px; border-radius: 28px; }
+    #stickyTimer .st-time { font-size: 21px; min-width: 64px; }
+    #stickyTimer .st-label { font-size: 12px; }
+    #stickyTimer .st-start-btn { padding: 8px 16px; font-size: 13px; }
+  }
 </style>
 </head>
 <body>
+
+<div id="stickyTimer">
+  <div class="st-dot"></div>
+  <div class="st-label" id="stickyTimerLabel">وقت التمرين</div>
+  <div class="st-time" id="stickyTimerTime" style="display:none;">00:00</div>
+  <button class="st-start-btn" id="stickyStartBtn" onclick="userStartWorkout()">ابدأ ▶</button>
+</div>
+
 
 <div id="timerOverlay">
   <div class="timer-box">
@@ -592,8 +667,12 @@ const DAYS = [
     name:'يوم راحة', exercises:[]
   },
   {
-    key:'sat', short:'السبت', icon:'🌙', rest:true,
-    name:'يوم راحة', exercises:[]
+    key:'sat', short:'السبت', icon:'💪', rest:false,
+    name:'يوم التعويض والعزل الشامل', color:'accent',
+    exercises:[
+      'الترابيس','الأكتاف الجانبية والترابيس','عزل الصدر واستطالة',
+      'السواعد والبايسبس الخارجية','أسفل الظهر (القطنية)','الترايسبس ومنتصف الصدر'
+    ]
   }
 ];
 
@@ -636,6 +715,18 @@ const monThuVideos = [
 monThuVideos.forEach((v,i)=>{
   state.videos['mon_'+i] = v;
   state.videos['thu_'+i] = v;
+});
+// السبت - يوم التعويض والعزل الشامل
+const satVideos = [
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/1.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/2.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/3.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/4.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/5.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/6.mp4',
+];
+satVideos.forEach((v,i)=>{
+  state.videos['sat_'+i] = v;
 });
 if(!state.openEx) state.openEx = null;
 if(!state.names) state.names = {};
@@ -699,6 +790,7 @@ function checkDayComplete(dk) {
 }
 
 function handleSetClick(dk, ei, si) {
+  if(!isWorkoutStarted(dk)) return; // لازم تضغط زر "ابدأ" أولاً
   if(state.sets[setKey(dk,ei,si)]) return;
   const prev = si===0 || state.sets[setKey(dk,ei,si-1)];
   if(!prev) return;
@@ -728,18 +820,20 @@ function handleSetClick(dk, ei, si) {
     }, 'التمرين التالي 💪');
   } else {
     // اكتمل اليوم كله!
+    stopWorkoutStopwatch();
     render();
     setTimeout(()=> showCelebration(dk), 500);
   }
 }
 
 function renderSets(dk, ei) {
+  const started = isWorkoutStarted(dk);
   let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
   for(let si=0;si<SETS;si++){
     const done = state.sets[setKey(dk,ei,si)];
     const prevDone = si===0 || state.sets[setKey(dk,ei,si-1)];
-    const isActive = !done && prevDone;
-    const locked = !done && !prevDone;
+    const isActive = started && !done && prevDone;
+    const locked = !done && (!prevDone || !started);
     let cls = 'set-tile';
     if(done) cls += ' done-tile';
     else if(isActive) cls += ' active-tile';
@@ -752,6 +846,9 @@ function renderSets(dk, ei) {
     </div>`;
   }
   html += '</div>';
+  if(!started) {
+    html += '<div class="start-hint">⬆️ اضغط زر "ابدأ" بالأعلى لتشغيل التمرين</div>';
+  }
   if(allSetsKey(dk,ei)) {
     html += '<div class="all-done-badge">✓ اكتملت جميع الجلسات</div>';
   }
@@ -884,6 +981,7 @@ function switchDay(i) {
   state.openEx = null;
   saveState();
   render();
+  syncStopwatchForActiveDay();
 }
 
 function render() {
@@ -891,7 +989,90 @@ function render() {
   renderDay();
 }
 
+// ===== STICKY WORKOUT STOPWATCH (يبدأ فقط بضغطة المستخدم) =====
+let stopwatchInterval = null;
+
+function fmtTime(totalSec) {
+  const m = Math.floor(totalSec/60);
+  const s = totalSec%60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function isWorkoutStarted(dk) {
+  return !!(state.workoutStart && state.workoutStart[dk]);
+}
+
+function userStartWorkout() {
+  const day = DAYS[state.activeDay];
+  if(!day || day.rest) return;
+  if(!state.workoutStart) state.workoutStart = {};
+  if(!state.workoutEnd) state.workoutEnd = {};
+  delete state.workoutEnd[day.key];
+  state.workoutStart[day.key] = Date.now();
+  saveState();
+  syncStopwatchForActiveDay();
+  render();
+}
+
+function updateStopwatchDisplay() {
+  const day = DAYS[state.activeDay];
+  if(!day || !state.workoutStart || !state.workoutStart[day.key]) return;
+  const endTime = (state.workoutEnd && state.workoutEnd[day.key]) ? state.workoutEnd[day.key] : Date.now();
+  const elapsed = Math.floor((endTime - state.workoutStart[day.key]) / 1000);
+  document.getElementById('stickyTimerTime').textContent = fmtTime(elapsed);
+}
+
+function stopWorkoutStopwatch() {
+  const day = DAYS[state.activeDay];
+  if(!day) return;
+  if(!state.workoutEnd) state.workoutEnd = {};
+  state.workoutEnd[day.key] = Date.now();
+  saveState();
+  updateStopwatchDisplay();
+  if(stopwatchInterval) { clearInterval(stopwatchInterval); stopwatchInterval = null; }
+}
+
+function syncStopwatchForActiveDay() {
+  const day = DAYS[state.activeDay];
+  const wrap = document.getElementById('stickyTimer');
+  const startBtn = document.getElementById('stickyStartBtn');
+  const timeEl = document.getElementById('stickyTimerTime');
+  const labelEl = document.getElementById('stickyTimerLabel');
+  if(stopwatchInterval) { clearInterval(stopwatchInterval); stopwatchInterval = null; }
+
+  if(!day || day.rest) {
+    wrap.classList.remove('show');
+    return;
+  }
+
+  const started = isWorkoutStarted(day.key);
+  const ended = state.workoutEnd && state.workoutEnd[day.key];
+
+  wrap.classList.add('show');
+
+  if(!started) {
+    wrap.classList.add('idle');
+    startBtn.style.display = 'inline-block';
+    timeEl.style.display = 'none';
+    labelEl.textContent = 'وقت التمرين';
+  } else if(started && !ended) {
+    wrap.classList.remove('idle');
+    startBtn.style.display = 'none';
+    timeEl.style.display = 'block';
+    labelEl.textContent = 'وقت التمرين';
+    stopwatchInterval = setInterval(updateStopwatchDisplay, 1000);
+    updateStopwatchDisplay();
+  } else {
+    wrap.classList.remove('idle');
+    startBtn.style.display = 'none';
+    timeEl.style.display = 'block';
+    labelEl.textContent = 'وقت التمرين الكلي';
+    updateStopwatchDisplay();
+  }
+}
+
 render();
+syncStopwatchForActiveDay();
 </script>
 
 <script>
@@ -911,7 +1092,7 @@ function resetAll() {
 
 <canvas id="confettiCanvas" style="display:none;"></canvas>
 <div id="celebrationOverlay">
-  <div class="celeb-title" id="celebTitle">بطل! 🏆</div>
+  <div class="celeb-title" id="celebTitle"><span class="celeb-icon" id="celebIcon">🏆</span> <span class="celeb-title-text" id="celebTitleText">بطل!</span></div>
   <div class="celeb-sub" id="celebSub">أكملت تمارين اليوم كاملة!</div>
   <div class="celeb-emoji">🔥💪🎉</div>
   <button class="celeb-close" onclick="closeCelebration()">شكراً، أنا الأفضل! 😎</button>
@@ -919,16 +1100,17 @@ function resetAll() {
 
 <script>
 const CELEB_MESSAGES = [
-  { title: 'وحش! 🔥', sub: 'ما في أحد مثلك، أكملت اليوم كله!' },
-  { title: 'بطل! 🏆', sub: 'أسد! أكملت جميع التمارين!' },
-  { title: 'أسطورة! ⚡', sub: 'الألم مؤقت، الفخر إلى الأبد!' },
-  { title: 'ملك! 💎', sub: 'تمرين كامل 100%، ما شاء الله!' },
-  { title: 'قوة خرافية! 💥', sub: 'أكملت اليوم كله بدون توقف!' },
+  { title: 'وحش!', sub: 'ما في أحد مثلك، أكملت اليوم كله!', icon: '🔥' },
+  { title: 'بطل!', sub: 'أسد! أكملت جميع التمارين!', icon: '🏆' },
+  { title: 'أسطورة!', sub: 'الألم مؤقت، الفخر إلى الأبد!', icon: '⚡' },
+  { title: 'وحش حديد!', sub: 'تمرين كامل 100%، ما شاء الله!', icon: '💪' },
+  { title: 'قوة خرافية!', sub: 'أكملت اليوم كله بدون توقف!', icon: '💥' },
 ];
 
 function showCelebration(dk) {
   const msg = CELEB_MESSAGES[Math.floor(Math.random() * CELEB_MESSAGES.length)];
-  document.getElementById('celebTitle').textContent = msg.title;
+  document.getElementById('celebIcon').textContent = msg.icon;
+  document.getElementById('celebTitleText').textContent = msg.title;
   document.getElementById('celebSub').textContent = msg.sub;
   document.getElementById('celebrationOverlay').classList.add('show');
   startConfetti();
