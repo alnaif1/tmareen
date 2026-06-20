@@ -291,50 +291,56 @@
     font-size: 13px; font-weight: 700; color: var(--accent);
   }
 
-  /* TIMER OVERLAY */
+  /* TIMER WIDGET (حر وقابل للسحب) */
   #timerOverlay {
     display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.75);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 999;
-    align-items: center; justify-content: center;
-    backdrop-filter: blur(6px);
+    cursor: grab;
+    touch-action: none;
   }
-  #timerOverlay.show { display: flex; }
+  #timerOverlay.show { display: block; }
+  #timerOverlay.dragging { cursor: grabbing; }
   .timer-box {
     background: var(--card);
     border: 1px solid var(--border2);
-    border-radius: 24px;
-    padding: 40px 48px;
+    border-radius: 22px;
+    padding: 22px 26px;
     text-align: center;
-    min-width: 280px;
-    box-shadow: 0 0 60px rgba(0,229,160,0.1);
-  }
-  .timer-title { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
-  .timer-next { font-size: 13px; color: var(--muted2); margin-bottom: 20px; }
-  .timer-ring {
-    width: 120px; height: 120px; margin: 0 auto 24px;
+    min-width: 200px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     position: relative;
+    user-select: none;
   }
-  .timer-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .timer-ring circle {
-    fill: none; stroke-width: 6;
-    stroke-linecap: round;
-  }
-  .ring-bg { stroke: var(--bg3); }
-  .ring-fill { stroke: var(--accent); transition: stroke-dashoffset 1s linear; }
-  .timer-num-big {
-    position: absolute; inset: 0;
+  .timer-drag-handle {
+    position: absolute;
+    top: 6px; left: 0; right: 0;
+    height: 18px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 36px; font-weight: 900; color: var(--accent);
-    transform: rotate(0deg);
+    gap: 3px;
+    cursor: grab;
+  }
+  #timerOverlay.dragging .timer-drag-handle { cursor: grabbing; }
+  .timer-drag-handle span {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--muted2);
+  }
+  .timer-title { font-size: 12px; color: var(--muted); margin-top: 10px; margin-bottom: 4px; }
+  .timer-next { font-size: 11px; color: var(--muted2); margin-bottom: 12px; }
+  .timer-num-static {
+    font-size: 48px; font-weight: 900; color: var(--accent);
+    margin: 0 auto 16px;
+    line-height: 1;
   }
   .timer-skip {
     background: transparent;
     border: 1px solid var(--border2);
     border-radius: 10px;
-    padding: 10px 28px;
-    font-size: 14px; color: var(--muted);
+    padding: 8px 22px;
+    font-size: 13px; color: var(--muted);
     cursor: pointer;
     font-family: 'Tajawal', sans-serif;
     transition: all 0.15s;
@@ -525,7 +531,7 @@
   }
   .quick-reset-btn:hover { background: rgba(255,80,80,0.1); border-color: rgba(255,80,80,0.6); }
 
-  /* STICKY WORKOUT STOPWATCH */
+  /* STICKY WORKOUT STOPWATCH (حر وقابل للسحب) */
   #stickyTimer {
     position: fixed;
     top: 14px;
@@ -542,8 +548,11 @@
     box-shadow: 0 8px 28px rgba(0,0,0,0.45);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    cursor: grab;
+    touch-action: none;
   }
   #stickyTimer.show { display: flex; }
+  #stickyTimer.dragging { cursor: grabbing; }
   #stickyTimer .st-dot {
     width: 10px; height: 10px; border-radius: 50%;
     background: var(--accent);
@@ -585,16 +594,10 @@
 
 <div id="timerOverlay">
   <div class="timer-box">
+    <div class="timer-drag-handle" id="timerDragHandle"><span></span><span></span><span></span></div>
     <div class="timer-title">وقت الراحة</div>
     <div class="timer-next" id="timerNext"></div>
-    <div class="timer-ring">
-      <svg viewBox="0 0 120 120">
-        <circle class="ring-bg" cx="60" cy="60" r="54"/>
-        <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="54"
-          stroke-dasharray="339.3" stroke-dashoffset="0"/>
-      </svg>
-      <div class="timer-num-big" id="timerNum">30</div>
-    </div>
+    <div class="timer-num-static" id="timerNum">30</div>
     <button class="timer-skip" onclick="skipTimer()">تخطي ←</button>
   </div>
 </div>
@@ -677,7 +680,6 @@ const DAYS = [
 ];
 
 const SETS = 3, REPS = [10, 10, 10], REST_SEC = 45;
-const CIRC = 2 * Math.PI * 54;
 
 function loadState() {
   try { return JSON.parse(localStorage.getItem('wb2_state') || 'null') || {}; } catch(e){ return {}; }
@@ -734,27 +736,84 @@ if(!state.names) state.names = {};
 let timerInterval = null, timerCB = null;
 
 function startTimer(cb, nextLabel) {
+  if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   timerCB = cb;
   let sec = REST_SEC;
   document.getElementById('timerNum').textContent = sec;
   document.getElementById('timerNext').textContent = nextLabel || '';
-  document.getElementById('ringFill').style.strokeDashoffset = 0;
   document.getElementById('timerOverlay').classList.add('show');
   timerInterval = setInterval(() => {
     sec--;
     document.getElementById('timerNum').textContent = sec;
-    const offset = CIRC * (1 - sec/REST_SEC);
-    document.getElementById('ringFill').style.strokeDashoffset = offset;
     if(sec <= 0) skipTimer();
   }, 1000);
 }
 function skipTimer() {
   clearInterval(timerInterval);
+  timerInterval = null;
   document.getElementById('timerOverlay').classList.remove('show');
   if(timerCB) { const cb = timerCB; timerCB = null; cb(); }
 }
 
 function setKey(dk, ei, si) { return `${dk}_${ei}_${si}`; }
+
+// ===== سحب العناصر العائمة بالماوس / اللمس =====
+function makeDraggable(el, handle, excludeSelector) {
+  let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+  function getPos(e) {
+    if(e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function onDown(e) {
+    if(excludeSelector && e.target.closest(excludeSelector)) return;
+    dragging = true;
+    el.classList.add('dragging');
+    const rect = el.getBoundingClientRect();
+    const p = getPos(e);
+    startX = p.x; startY = p.y;
+    startLeft = rect.left; startTop = rect.top;
+    el.style.left = startLeft + 'px';
+    el.style.top = startTop + 'px';
+    el.style.transform = 'none';
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    if(!dragging) return;
+    const p = getPos(e);
+    let newLeft = startLeft + (p.x - startX);
+    let newTop = startTop + (p.y - startY);
+    const w = el.offsetWidth, h = el.offsetHeight;
+    newLeft = Math.max(4, Math.min(window.innerWidth - w - 4, newLeft));
+    newTop = Math.max(4, Math.min(window.innerHeight - h - 4, newTop));
+    el.style.left = newLeft + 'px';
+    el.style.top = newTop + 'px';
+  }
+
+  function onUp() {
+    dragging = false;
+    el.classList.remove('dragging');
+  }
+
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+makeDraggable(
+  document.getElementById('timerOverlay'),
+  document.getElementById('timerDragHandle')
+);
+makeDraggable(
+  document.getElementById('stickyTimer'),
+  document.getElementById('stickyTimer'),
+  '.st-start-btn'
+);
 function allSetsKey(dk, ei) { return [0,1,2].every(si => state.sets[setKey(dk,ei,si)]); }
 function doneCount(dk) {
   const day = DAYS.find(d=>d.key===dk);
@@ -790,7 +849,6 @@ function checkDayComplete(dk) {
 }
 
 function handleSetClick(dk, ei, si) {
-  if(!isWorkoutStarted(dk)) return; // لازم تضغط زر "ابدأ" أولاً
   if(state.sets[setKey(dk,ei,si)]) return;
   const prev = si===0 || state.sets[setKey(dk,ei,si-1)];
   if(!prev) return;
@@ -803,12 +861,12 @@ function handleSetClick(dk, ei, si) {
   const isLastExercise = ei === day.exercises.length - 1;
 
   if(!isLastSet) {
-    // راحة بين الجلسات
-    render();
-    startTimer(()=>{ render(); }, `الجلسة ${si+2} من التمرين`);
+    // راحة بين الجلسات - تحديث جزئي بدون إعادة بناء الفيديو
+    updateExerciseInPlace(dk, ei);
+    startTimer(()=>{ updateExerciseInPlace(dk, ei); }, `الجلسة ${si+2} من التمرين`);
   } else if(!isLastExercise) {
     // انتهت جلسات هذا التمرين → راحة ثم انتقال للتمرين التالي
-    render();
+    updateExerciseInPlace(dk, ei);
     startTimer(()=>{
       state.openEx = dk + '_' + (ei + 1);
       saveState();
@@ -821,19 +879,18 @@ function handleSetClick(dk, ei, si) {
   } else {
     // اكتمل اليوم كله!
     stopWorkoutStopwatch();
-    render();
+    updateExerciseInPlace(dk, ei);
     setTimeout(()=> showCelebration(dk), 500);
   }
 }
 
-function renderSets(dk, ei) {
-  const started = isWorkoutStarted(dk);
+function renderSetsInner(dk, ei) {
   let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
   for(let si=0;si<SETS;si++){
     const done = state.sets[setKey(dk,ei,si)];
     const prevDone = si===0 || state.sets[setKey(dk,ei,si-1)];
-    const isActive = started && !done && prevDone;
-    const locked = !done && (!prevDone || !started);
+    const isActive = !done && prevDone;
+    const locked = !done && !prevDone;
     let cls = 'set-tile';
     if(done) cls += ' done-tile';
     else if(isActive) cls += ' active-tile';
@@ -846,13 +903,14 @@ function renderSets(dk, ei) {
     </div>`;
   }
   html += '</div>';
-  if(!started) {
-    html += '<div class="start-hint">⬆️ اضغط زر "ابدأ" بالأعلى لتشغيل التمرين</div>';
-  }
   if(allSetsKey(dk,ei)) {
     html += '<div class="all-done-badge">✓ اكتملت جميع الجلسات</div>';
   }
   return html;
+}
+
+function renderSets(dk, ei) {
+  return `<div class="sets-area-wrap">${renderSetsInner(dk, ei)}</div>`;
 }
 
 function isDirectVideo(url) {
@@ -894,6 +952,43 @@ function renderVideoSection(dk, ei) {
 function saveVideo(dk, ei) {
   const inp = document.getElementById(`vi_${dk}_${ei}`);
   if(inp) { setVideo(dk, ei, inp.value.trim()); render(); }
+}
+
+// تحديث جزئي لبطاقة تمرين واحد فقط (بدون لمس عنصر الفيديو) لمنع ارتفاع السكرول
+function updateExerciseInPlace(dk, ei) {
+  const card = document.getElementById('exc_' + dk + '_' + ei);
+  if(!card) { render(); return; }
+
+  const allDone = allSetsKey(dk, ei);
+  const doneSi = [0,1,2].filter(si=>state.sets[setKey(dk,ei,si)]).length;
+
+  // تحديث البادج والنقاط
+  const badge = card.querySelector('.ex-badge');
+  if(badge) {
+    badge.textContent = allDone ? '✓' : (ei+1);
+    card.classList.toggle('all-done', allDone);
+  }
+  const sub = card.querySelector('.ex-sub');
+  if(sub) sub.textContent = `${SETS} جلسات: 10-10-10 عدة  ·  ${doneSi}/${SETS} مكتمل`;
+
+  // تحديث شبكة الجلسات فقط دون التأثير على الفيديو
+  const setsArea = card.querySelector('.sets-area-wrap');
+  if(setsArea) {
+    setsArea.innerHTML = renderSetsInner(dk, ei);
+  }
+
+  // تحديث شريط التقدم العام لليوم
+  const done = doneCount(dk);
+  const total = totalSets(dk);
+  const pct = total ? Math.round(done/total*100) : 0;
+  const pf = document.getElementById('progressFill');
+  const pp = document.getElementById('progressPct');
+  const pt = document.getElementById('progressText');
+  if(pf) pf.style.width = pct+'%';
+  if(pp) pp.textContent = pct+'%';
+  if(pt) pt.textContent = `${done} / ${total} جلسة مكتملة`;
+
+  renderStrip();
 }
 
 function renderDay() {
@@ -987,6 +1082,16 @@ function switchDay(i) {
 function render() {
   renderStrip();
   renderDay();
+}
+
+function renderKeepScroll() {
+  const y = window.scrollY;
+  render();
+  window.scrollTo(0, y);
+  requestAnimationFrame(()=>{
+    window.scrollTo(0, y);
+    requestAnimationFrame(()=> window.scrollTo(0, y));
+  });
 }
 
 // ===== STICKY WORKOUT STOPWATCH (يبدأ فقط بضغطة المستخدم) =====
