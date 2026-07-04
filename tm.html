@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جدول تمارين الدامبل المنزلي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070a;
+    --bg2: #0f1218;
+    --bg3: #161a23;
+    --card: rgba(22, 26, 35, 0.7);
+    --card2: #1f2533;
+    --accent: #00ff9d;
+    --accent2: #00b87a;
+    --accent3: #00ffc2;
+    --text: #ffffff;
+    --muted: #a0aab5;
+    --muted2: #6c7989;
+    --border: rgba(255, 255, 255, 0.08);
+    --border2: rgba(0, 255, 157, 0.4);
+    --rest-col: #2a2030;
+    --rest-accent: #b06cff;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Dynamic BG Pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(0, 255, 157, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(0, 184, 122, 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(20, 24, 31, 1) 0%, rgba(5, 7, 10, 1) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 840px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    padding: 50px 0 40px;
+    text-align: center;
+  }
+  .logo-ring {
+    width: 70px; height: 70px;
+    border-radius: 24px;
+    border: 2px solid var(--accent);
+    background: rgba(0, 255, 157, 0.05);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 32px;
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.15);
+    animation: pulse 3s ease-in-out infinite;
+    backdrop-filter: blur(5px);
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 30px rgba(0, 255, 157, 0.15); }
+    50% { box-shadow: 0 0 50px rgba(0, 255, 157, 0.35); }
+  }
+  header h1 {
+    font-size: 32px; font-weight: 900;
+    background: linear-gradient(135deg, #fff, #a0aab5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  header p { font-size: 14px; color: var(--muted); font-weight: 300; letter-spacing: 0.5px; }
+
+  /* WEEK STRIP */
+  .week-strip {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .day-pill {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 12px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+  }
+  .day-pill:hover { background: rgba(255, 255, 255, 0.05); }
+  .day-pill.active {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+  }
+  .day-pill.rest-day.active { background: linear-gradient(135deg, #7a3fb0, var(--rest-accent)); box-shadow: 0 4px 15px rgba(176, 108, 255, 0.3); }
+  .day-pill .d-short { font-size: 13px; font-weight: 700; color: var(--muted); }
+  .day-pill.active .d-short { color: #000; }
+  .day-pill.rest-day .d-short { color: #b06cff; }
+  .day-pill.rest-day.active .d-short { color: #fff; }
+  .day-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bg3); margin: 5px auto 0; border: 1px solid var(--muted2); }
+  .day-pill.active .day-dot { background: rgba(0,0,0,0.4); border-color: transparent; }
+  .day-pill.done .day-dot { background: var(--accent); border-color: transparent; box-shadow: 0 0 8px var(--accent); }
+
+  /* DAY HEADER */
+  .day-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 28px;
+    animation: fadeSlide 0.4s ease;
+  }
+  @keyframes fadeSlide { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+  .day-icon {
+    width: 54px; height: 54px; border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0, 255, 157, 0.2);
+  }
+  .day-icon.rest-icon { background: linear-gradient(135deg, #7a3fb0, var(--rest-accent)); box-shadow: 0 8px 20px rgba(176, 108, 255, 0.2); }
+  .day-title { font-size: 24px; font-weight: 900; color: #fff; }
+  .day-meta { font-size: 14px; color: var(--muted); margin-top: 4px; font-weight: 300; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-bottom: 28px; background: rgba(255,255,255,0.03); padding: 16px 20px; border-radius: 16px; border: 1px solid var(--border); }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
+  .progress-track {
+    height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent3));
+    border-radius: 10px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  /* REST SCREEN */
+  .rest-screen {
+    text-align: center;
+    padding: 80px 20px;
+    background: rgba(176, 108, 255, 0.05);
+    border: 1px solid rgba(176, 108, 255, 0.15);
+    border-radius: 24px;
+    animation: fadeSlide 0.4s ease;
+  }
+  .rest-big-icon { font-size: 80px; margin-bottom: 24px; filter: drop-shadow(0 0 20px rgba(176, 108, 255, 0.4)); }
+  .rest-screen h2 { font-size: 28px; font-weight: 900; color: var(--rest-accent); margin-bottom: 12px; }
+  .rest-screen p { font-size: 16px; color: var(--muted); font-weight: 300; line-height: 1.8; }
+
+  /* EXERCISE CARDS */
+  .exercises-list { display: flex; flex-direction: column; gap: 12px; }
+  .ex-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    animation: fadeSlide 0.4s ease both;
+    backdrop-filter: blur(12px);
+  }
+  .ex-card:nth-child(1) { animation-delay: 0.05s; }
+  .ex-card:nth-child(2) { animation-delay: 0.1s; }
+  .ex-card:nth-child(3) { animation-delay: 0.15s; }
+  .ex-card:nth-child(4) { animation-delay: 0.2s; }
+  .ex-card:nth-child(5) { animation-delay: 0.25s; }
+  .ex-card:nth-child(6) { animation-delay: 0.3s; }
+  .ex-card:hover { border-color: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
+  .ex-card.open { border-color: var(--border2); background: rgba(0, 255, 157, 0.02); }
+  .ex-card.all-done { border-color: rgba(0, 255, 157, 0.4); background: rgba(0, 255, 157, 0.05); }
+
+  .ex-header {
+    padding: 18px 20px;
+    display: flex; align-items: center; gap: 16px;
+    cursor: pointer;
+  }
+
+  .ex-badge {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    flex-shrink: 0; transition: all 0.3s;
+  }
+  .ex-card.all-done .ex-badge { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 255, 157, 0.4); }
+
+  .ex-label { flex: 1; min-width: 0; }
+  .ex-name {
+    font-size: 16px; font-weight: 700; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ex-sub { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 400; }
+
+  .ex-arrow {
+    color: var(--muted2); font-size: 16px;
+    transition: transform 0.3s; flex-shrink: 0;
+  }
+  .ex-card.open .ex-arrow { transform: rotate(180deg); color: var(--accent); }
+
+  /* EXPANDED BODY */
+  .ex-body { display: none; padding: 0 20px 20px; }
+  .ex-card.open .ex-body { display: block; }
+
+  /* VIDEO SECTION */
+  .video-section { margin-bottom: 16px; }
+  .video-label { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
+  .video-row { display: flex; gap: 10px; }
+  .video-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.2s;
+    direction: ltr;
+  }
+  .video-input::placeholder { color: var(--muted2); }
+  .video-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 255, 157, 0.1); }
+  .save-btn {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none; border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 14px; font-weight: 700;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Tajawal', sans-serif;
+    white-space: nowrap;
+  }
+  .save-btn:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0, 255, 157, 0.3); }
+  .video-embed-wrap { margin-top: 12px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+  .video-embed-wrap iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+  .video-link-display {
+    margin-top: 10px; padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3); border-radius: 12px;
+    font-size: 13px; border: 1px solid var(--border);
+  }
+  .video-link-display a { color: var(--accent); text-decoration: none; direction: ltr; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .video-link-display a:hover { text-decoration: underline; }
+
+  /* DIVIDER */
+  .ex-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* SETS GRID */
+  .sets-title { font-size: 13px; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .sets-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .set-tile {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    user-select: none;
+  }
+  .set-tile:hover:not(.done-tile):not(.locked-tile) { border-color: var(--border2); background: rgba(0, 255, 157, 0.05); transform: translateY(-2px); }
+  .set-tile.active-tile {
+    border-color: var(--accent);
+    background: rgba(0, 255, 157, 0.08);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.15);
+  }
+  .set-tile.done-tile {
+    border-color: rgba(0, 255, 157, 0.3);
+    background: rgba(0, 255, 157, 0.1);
+  }
+  .set-tile.locked-tile { opacity: 0.4; cursor: not-allowed; }
+  .tile-num { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .tile-reps { font-size: 24px; font-weight: 900; color: var(--text); }
+  .set-tile.active-tile .tile-reps { color: var(--accent); text-shadow: 0 0 10px rgba(0, 255, 157, 0.3); }
+  .set-tile.done-tile .tile-reps { color: var(--accent2); }
+  .tile-status { font-size: 12px; color: var(--muted2); margin-top: 6px; font-weight: 600; }
+  .set-tile.active-tile .tile-status { color: var(--accent); }
+  .set-tile.done-tile .tile-status { color: var(--accent2); }
+
+  .start-hint {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted2);
+    font-weight: 500;
+  }
+  .all-done-badge {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 14px;
+    padding: 12px;
+    background: rgba(0, 255, 157, 0.1);
+    border: 1px solid rgba(0, 255, 157, 0.3);
+    border-radius: 12px;
+    font-size: 14px; font-weight: 700; color: var(--accent);
+  }
+
+  /* TIMER WIDGET (حر وقابل للسحب) */
+  #timerOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 6, 9, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  #timerOverlay.show { display: flex; }
+  .timer-box {
+    background: rgba(20, 24, 31, 0.9);
+    border: 1px solid var(--border2);
+    border-radius: 28px;
+    padding: 30px 40px;
+    text-align: center;
+    min-width: 240px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0, 255, 157, 0.1);
+    position: relative;
+    user-select: none;
+    backdrop-filter: blur(20px);
+  }
+  .timer-title { font-size: 14px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .timer-next { font-size: 12px; color: var(--muted2); margin-bottom: 16px; }
+  .timer-num-static {
+    font-size: 64px; font-weight: 900; color: var(--accent);
+    margin: 0 auto 24px;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-skip {
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 10px 28px;
+    font-size: 14px; color: var(--text);
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .timer-skip:hover { background: rgba(0, 255, 157, 0.1); border-color: var(--accent); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--card2); }
+
+  @media (max-width: 500px) {
+    .week-strip { gap: 4px; padding: 6px; }
+    .day-pill { padding: 10px 2px; border-radius: 12px; }
+    .d-short { font-size: 12px; }
+    header h1 { font-size: 26px; }
+    .timer-box { padding: 28px 28px; min-width: 220px; }
+  }
+
+  .yt-preview {
+    margin-top: 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    aspect-ratio: 16/9;
+    background: var(--bg3);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+  }
+  .yt-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .yt-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    transition: background 0.2s;
+  }
+  .yt-preview:hover .yt-overlay { background: rgba(0,0,0,0.6); }
+  .yt-play-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #ff0000;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+  }
+  .yt-preview:hover .yt-play-btn { transform: scale(1.1); }
+  .yt-open-label {
+    font-size: 14px; font-weight: 700; color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+  .yt-preview.no-thumb { min-height: 80px; }
+
+  .reset-section {
+    margin-top: 48px;
+    padding: 24px 0 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 16px;
+    padding: 14px 32px;
+    color: #ff6b6b;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .reset-btn:hover { background: rgba(255,80,80,0.08); border-color: rgba(255,80,80,0.6); }
+  .reset-confirm {
+    display: none;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .reset-confirm.show { display: block; }
+  .reset-yes {
+    background: #ff4444;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 24px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    margin: 10px 6px 0;
+    transition: all 0.2s;
+  }
+  .reset-yes:hover { background: #cc2222; }
+  .reset-no {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 24px;
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    margin: 10px 6px 0;
+    transition: all 0.2s;
+  }
+  .reset-no:hover { background: rgba(255,255,255,0.05); }
+
+  /* CELEBRATION */
+  #celebrationOverlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 9999;
+    align-items: center; justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+  }
+  #celebrationOverlay.show { display: flex; }
+  .celeb-title {
+    font-size: 72px; font-weight: 900;
+    line-height: 1.1; margin-bottom: 16px;
+    animation: celebPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    opacity: 1;
+  }
+  .celeb-icon {
+    font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+    -webkit-text-fill-color: initial;
+    color: initial;
+  }
+  .celeb-title-text {
+    color: var(--accent3);
+    background: linear-gradient(135deg, #00e5a0, #00ffc2, #ffe600, #ff6b35);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .celeb-sub {
+    font-size: 24px; color: #fff; font-weight: 700;
+    animation: celebPop 0.6s 0.15s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    margin-bottom: 12px;
+    opacity: 1;
+  }
+  .celeb-emoji {
+    font-size: 56px;
+    animation: celebPop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    margin-bottom: 40px;
+    opacity: 1;
+  }
+  .celeb-close {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none; border-radius: 16px;
+    padding: 16px 48px;
+    font-size: 18px; font-weight: 900; color: #000;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    animation: celebPop 0.6s 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    transition: transform 0.2s;
+    opacity: 1;
+    box-shadow: 0 8px 30px rgba(0, 255, 157, 0.3);
+  }
+  .celeb-close:hover { transform: scale(1.05); }
+  @keyframes celebPop {
+    from { opacity:0; transform: scale(0.5); }
+    to { opacity:1; transform: scale(1); }
+  }
+  #confettiCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  .quick-reset-btn {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 24px;
+    padding: 8px 24px;
+    color: #ff8080;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quick-reset-btn:hover { background: rgba(255,80,80,0.1); border-color: rgba(255,80,80,0.6); }
+
+  /* STICKY WORKOUT STOPWATCH (حر وقابل للسحب) */
+  #stickyTimer {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    gap: 16px;
+    background: rgba(15,18,24,0.85);
+    border: 1px solid var(--border2);
+    border-radius: 40px;
+    padding: 12px 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0, 255, 157, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    cursor: grab;
+    touch-action: none;
+  }
+  #stickyTimer.show { display: flex; }
+  #stickyTimer.dragging { cursor: grabbing; }
+  #stickyTimer .st-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent);
+    animation: stPulse 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px var(--accent);
+  }
+  #stickyTimer.idle .st-dot { background: var(--muted2); box-shadow: none; animation: none; }
+  @keyframes stPulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+  #stickyTimer .st-label { font-size: 14px; color: var(--muted); font-weight: 500; }
+  #stickyTimer .st-time { font-size: 28px; font-weight: 900; color: var(--text); direction: ltr; min-width: 80px; text-align: center; letter-spacing: 0.5px; font-variant-numeric: tabular-nums; }
+  #stickyTimer .st-start-btn {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none; border-radius: 24px;
+    padding: 10px 24px;
+    font-size: 15px; font-weight: 800; color: #000;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    transition: transform 0.2s;
+    white-space: nowrap;
+  }
+  #stickyTimer .st-start-btn:hover { transform: scale(1.05); }
+  @media (max-width: 500px) {
+    #stickyTimer { top: 10px; padding: 10px 20px; gap: 12px; border-radius: 30px; }
+    #stickyTimer .st-time { font-size: 22px; min-width: 68px; }
+    #stickyTimer .st-label { font-size: 13px; }
+    #stickyTimer .st-start-btn { padding: 8px 18px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stickyTimer">
+  <div class="st-dot"></div>
+  <div class="st-label" id="stickyTimerLabel">وقت التمرين</div>
+  <div class="st-time" id="stickyTimerTime" style="display:none;">00:00</div>
+  <button class="st-start-btn" id="stickyStartBtn" onclick="userStartWorkout()">ابدأ ▶</button>
+</div>
+
+
+<div id="timerOverlay">
+  <div class="timer-box">
+    <div class="timer-title">وقت الراحة</div>
+    <div class="timer-next" id="timerNext"></div>
+    <div class="timer-num-static" id="timerNum">30</div>
+    <button class="timer-skip" onclick="skipTimer()">تخطي ←</button>
+  </div>
+</div>
+
+<div class="container">
+  <header>
+    <div class="logo-ring">🏋️</div>
+    <h1>جدول تمارين الدامبل المنزلي</h1>
+    <p>٣ جلسات: 10-10-10 عدة · 45 ثانية راحة</p>
+    <button class="quick-reset-btn" onclick="showResetConfirm()">🔄 إعادة التمارين</button>
+    <div class="reset-confirm" id="resetConfirm">
+      <div>هل أنت متأكد؟ سيتم مسح كل التقدم</div>
+      <button class="reset-yes" onclick="resetAll()">نعم، ابدأ من جديد</button>
+      <button class="reset-no" onclick="hideResetConfirm()">إلغاء</button>
+    </div>
+  </header>
+
+  <div class="week-strip" id="weekStrip"></div>
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span id="progressText">التقدم اليومي</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div id="dayView"></div>
+</div>
+
+<script>
+const DAYS = [
+  {
+    key:'sun', short:'الأحد', icon:'💪', rest:false,
+    name:'الأحد والأربعاء — Push', color:'accent',
+    exercises:[
+      'Flat Dumbbell Bench Press — الصدر الأوسط',
+      'Incline Dumbbell Bench Press — الصدر العلوي',
+      'Resistance Band Chest Fly — عزل الصدر',
+      'Seated Dumbbell Shoulder Press — الكتف الأمامي والجانبي',
+      'Dumbbell Lateral Raise — الكتف الجانبي',
+      'Resistance Band Triceps Pushdown — الرأس الجانبي والإنسي',
+      'Dumbbell Overhead Triceps Extension — الرأس الطويل'
+    ]
+  },
+  {
+    key:'mon', short:'الاثنين', icon:'💪', rest:false,
+    name:'الاثنين والخميس — Pull', color:'accent',
+    exercises:[
+      'Resistance Band Lat Pulldown — الظهر العريض',
+      'Dumbbell Bent-Over Row — منتصف الظهر + اللاتس',
+      'Chest Supported Dumbbell Row — منتصف الظهر',
+      'Resistance Band Face Pull — الكتف الخلفي + الترابيس العلوية',
+      'Incline Dumbbell Curl — البايسبس',
+      'Hammer Curl — البايسبس + العضدية + الساعد'
+    ]
+  },
+  {
+    key:'tue', short:'الثلاثاء', icon:'🌙', rest:true,
+    name:'يوم راحة', exercises:[]
+  },
+  {
+    key:'wed', short:'الأربعاء', icon:'💪', rest:false,
+    name:'الأحد والأربعاء — Push', color:'accent',
+    exercises:[
+      'Flat Dumbbell Bench Press — الصدر الأوسط',
+      'Incline Dumbbell Bench Press — الصدر العلوي',
+      'Resistance Band Chest Fly — عزل الصدر',
+      'Seated Dumbbell Shoulder Press — الكتف الأمامي والجانبي',
+      'Dumbbell Lateral Raise — الكتف الجانبي',
+      'Resistance Band Triceps Pushdown — الرأس الجانبي والإنسي',
+      'Dumbbell Overhead Triceps Extension — الرأس الطويل'
+    ]
+  },
+  {
+    key:'thu', short:'الخميس', icon:'💪', rest:false,
+    name:'الاثنين والخميس — Pull', color:'accent',
+    exercises:[
+      'Resistance Band Lat Pulldown — الظهر العريض',
+      'Dumbbell Bent-Over Row — منتصف الظهر + اللاتس',
+      'Chest Supported Dumbbell Row — منتصف الظهر',
+      'Resistance Band Face Pull — الكتف الخلفي + الترابيس العلوية',
+      'Incline Dumbbell Curl — البايسبس',
+      'Hammer Curl — البايسبس + العضدية + الساعد'
+    ]
+  },
+  {
+    key:'fri', short:'الجمعة', icon:'🌙', rest:true,
+    name:'يوم راحة', exercises:[]
+  },
+  {
+    key:'sat', short:'السبت', icon:'🌙', rest:true,
+    name:'يوم راحة', exercises:[]
+  }
+];
+
+const SETS = 3, REPS = [10, 10, 10], REST_SEC = 45;
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem('wb2_state') || 'null') || {}; } catch(e){ return {}; }
+}
+function saveState() {
+  try { localStorage.setItem('wb2_state', JSON.stringify(state)); } catch(e){}
+}
+
+let state = loadState();
+if(!state.activeDay && state.activeDay !== 0) state.activeDay = 0;
+if(!state.sets) state.sets = {};
+if(!state.videos) state.videos = {};
+// الأحد والأربعاء - نفس التمارين
+const sunWedVideos = [
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/11.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/2.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/33.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/3.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/55.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/66.MP4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/5.mov',
+];
+sunWedVideos.forEach((v,i)=>{
+  state.videos['sun_'+i] = v;
+  state.videos['wed_'+i] = v;
+});
+// الاثنين والخميس - نفس التمارين
+const monThuVideos = [
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/77.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/88.MP4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/3.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/99.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/100.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/6.mov',
+];
+monThuVideos.forEach((v,i)=>{
+  state.videos['mon_'+i] = v;
+  state.videos['thu_'+i] = v;
+});
+// السبت - يوم التعويض والعزل الشامل
+const satVideos = [
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/1.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/2.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/3.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/4.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/5.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/sat/6.mp4',
+];
+satVideos.forEach((v,i)=>{
+  state.videos['sat_'+i] = v;
+});
+if(!state.openEx) state.openEx = null;
+if(!state.names) state.names = {};
+
+let timerInterval = null, timerCB = null;
+
+function startTimer(cb, nextLabel) {
+  if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  timerCB = cb;
+  let sec = REST_SEC;
+  document.getElementById('timerNum').textContent = sec;
+  document.getElementById('timerNext').textContent = nextLabel || '';
+  document.getElementById('timerOverlay').classList.add('show');
+  timerInterval = setInterval(() => {
+    sec--;
+    document.getElementById('timerNum').textContent = sec;
+    if(sec <= 0) skipTimer();
+  }, 1000);
+}
+function skipTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  document.getElementById('timerOverlay').classList.remove('show');
+  if(timerCB) { const cb = timerCB; timerCB = null; cb(); }
+}
+
+function setKey(dk, ei, si) { return `${dk}_${ei}_${si}`; }
+
+// ===== سحب العناصر العائمة بالماوس / اللمس =====
+function makeDraggable(el, handle, excludeSelector) {
+  let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+  function getPos(e) {
+    if(e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function onDown(e) {
+    if(excludeSelector && e.target.closest(excludeSelector)) return;
+    dragging = true;
+    el.classList.add('dragging');
+    const rect = el.getBoundingClientRect();
+    const p = getPos(e);
+    startX = p.x; startY = p.y;
+    startLeft = rect.left; startTop = rect.top;
+    el.style.left = startLeft + 'px';
+    el.style.top = startTop + 'px';
+    el.style.transform = 'none';
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    if(!dragging) return;
+    const p = getPos(e);
+    let newLeft = startLeft + (p.x - startX);
+    let newTop = startTop + (p.y - startY);
+    const w = el.offsetWidth, h = el.offsetHeight;
+    newLeft = Math.max(4, Math.min(window.innerWidth - w - 4, newLeft));
+    newTop = Math.max(4, Math.min(window.innerHeight - h - 4, newTop));
+    el.style.left = newLeft + 'px';
+    el.style.top = newTop + 'px';
+  }
+
+  function onUp() {
+    dragging = false;
+    el.classList.remove('dragging');
+  }
+
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+makeDraggable(
+  document.getElementById('stickyTimer'),
+  document.getElementById('stickyTimer'),
+  '.st-start-btn'
+);
+function allSetsKey(dk, ei) { return [0,1,2].every(si => state.sets[setKey(dk,ei,si)]); }
+function doneCount(dk) {
+  const day = DAYS.find(d=>d.key===dk);
+  if(!day||day.rest) return 0;
+  return day.exercises.reduce((a,_,ei)=>[0,1,2].filter(si=>state.sets[setKey(dk,ei,si)]).length+a,0);
+}
+function totalSets(dk) {
+  const day = DAYS.find(d=>d.key===dk);
+  return day&&!day.rest ? day.exercises.length * SETS : 0;
+}
+
+function getExName(dk, ei) {
+  const k = `${dk}_${ei}`;
+  return state.names[k] || DAYS.find(d=>d.key===dk).exercises[ei];
+}
+function setExName(dk, ei, val) {
+  state.names[`${dk}_${ei}`] = val;
+  saveState();
+}
+
+function getVideo(dk, ei) { return state.videos[`${dk}_${ei}`] || ''; }
+function setVideo(dk, ei, url) { state.videos[`${dk}_${ei}`] = url; saveState(); }
+
+function ytId(url) {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function checkDayComplete(dk) {
+  const day = DAYS.find(d=>d.key===dk);
+  if(!day||day.rest) return false;
+  return day.exercises.every((_,ei)=>[0,1,2].every(si=>state.sets[setKey(dk,ei,si)]));
+}
+
+function handleSetClick(dk, ei, si) {
+  if(state.sets[setKey(dk,ei,si)]) return;
+  const prev = si===0 || state.sets[setKey(dk,ei,si-1)];
+  if(!prev) return;
+
+  state.sets[setKey(dk,ei,si)] = true;
+  saveState();
+
+  const day = DAYS.find(d=>d.key===dk);
+  const isLastSet = si === SETS - 1;
+  const isLastExercise = ei === day.exercises.length - 1;
+
+  if(!isLastSet) {
+    // راحة بين الجلسات - تحديث جزئي بدون إعادة بناء الفيديو
+    updateExerciseInPlace(dk, ei);
+    startTimer(()=>{ updateExerciseInPlace(dk, ei); }, `الجلسة ${si+2} من التمرين`);
+  } else if(!isLastExercise) {
+    // انتهت جلسات هذا التمرين → راحة ثم انتقال للتمرين التالي
+    updateExerciseInPlace(dk, ei);
+    startTimer(()=>{
+      state.openEx = dk + '_' + (ei + 1);
+      saveState();
+      render();
+      setTimeout(()=>{
+        const el = document.getElementById('exc_' + dk + '_' + (ei+1));
+        if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+      }, 200);
+    }, 'التمرين التالي 💪');
+  } else {
+    // اكتمل اليوم كله!
+    stopWorkoutStopwatch();
+    updateExerciseInPlace(dk, ei);
+    setTimeout(()=> showCelebration(dk), 500);
+  }
+}
+
+function renderSetsInner(dk, ei) {
+  let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
+  for(let si=0;si<SETS;si++){
+    const done = state.sets[setKey(dk,ei,si)];
+    const prevDone = si===0 || state.sets[setKey(dk,ei,si-1)];
+    const isActive = !done && prevDone;
+    const locked = !done && !prevDone;
+    let cls = 'set-tile';
+    if(done) cls += ' done-tile';
+    else if(isActive) cls += ' active-tile';
+    else if(locked) cls += ' locked-tile';
+    const statusText = done ? '✓ تمت' : isActive ? 'اضغط' : '🔒';
+    html += `<div class="${cls}" onclick="handleSetClick('${dk}',${ei},${si})">
+      <div class="tile-num">الجلسة ${si+1}</div>
+      <div class="tile-reps">${REPS[si]}</div>
+      <div class="tile-status">${statusText}</div>
+    </div>`;
+  }
+  html += '</div>';
+  if(allSetsKey(dk,ei)) {
+    html += '<div class="all-done-badge">✓ اكتملت جميع الجلسات</div>';
+  }
+  return html;
+}
+
+function renderSets(dk, ei) {
+  return `<div class="sets-area-wrap">${renderSetsInner(dk, ei)}</div>`;
+}
+
+function isDirectVideo(url) {
+  return /\.(mp4|webm|mov|m4v|MP4|MOV)([?#].*)?$/i.test(url);
+}
+
+function renderVideoSection(dk, ei) {
+  const url = getVideo(dk,ei);
+  const vid = url ? ytId(url) : null;
+  let previewHtml = '';
+  if(url && isDirectVideo(url)) {
+    previewHtml = `<div class="video-embed-wrap">
+        <div style="position:relative;border-radius:12px;overflow:hidden;background:#000;"><div style="position:absolute;top:0;right:0;width:90px;height:90px;background:#000;z-index:2;pointer-events:none;border-bottom-left-radius:8px;"></div>
+        <video controls autoplay muted playsinline preload="auto" loop style="width:100%;display:block;max-height:320px;">
+          <source src="${url}" type="video/mp4">
+        </video>
+        
+      </div>
+      </div>`;
+  } else if(url && vid) {
+    const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+    previewHtml = `<div class="yt-preview" onclick="window.open('${url}','_blank')">
+        <img src="${thumb}" alt="thumbnail" onerror="this.parentElement.classList.add('no-thumb')">
+        <div class="yt-overlay"><div class="yt-play-btn">▶</div><div class="yt-open-label">افتح في يوتيوب</div></div>
+      </div>`;
+  } else if(url) {
+    previewHtml = `<div class="video-link-display"><a href="${url}" target="_blank" rel="noopener">🔗 افتح الرابط</a></div>`;
+  }
+  return `<div class="video-section">
+    <div class="video-label">رابط فيديو التمرين</div>
+    <div class="video-row">
+      <input class="video-input" type="url" placeholder="رابط MP4 أو يوتيوب..." value="${url}" id="vi_${dk}_${ei}">
+      <button class="save-btn" onclick="saveVideo('${dk}',${ei})">حفظ</button>
+    </div>
+    ${previewHtml}
+  </div>`;
+}
+
+function saveVideo(dk, ei) {
+  const inp = document.getElementById(`vi_${dk}_${ei}`);
+  if(inp) { setVideo(dk, ei, inp.value.trim()); render(); }
+}
+
+// تحديث جزئي لبطاقة تمرين واحد فقط (بدون لمس عنصر الفيديو) لمنع ارتفاع السكرول
+function updateExerciseInPlace(dk, ei) {
+  const card = document.getElementById('exc_' + dk + '_' + ei);
+  if(!card) { render(); return; }
+
+  const allDone = allSetsKey(dk, ei);
+  const doneSi = [0,1,2].filter(si=>state.sets[setKey(dk,ei,si)]).length;
+
+  // تحديث البادج والنقاط
+  const badge = card.querySelector('.ex-badge');
+  if(badge) {
+    badge.textContent = allDone ? '✓' : (ei+1);
+    card.classList.toggle('all-done', allDone);
+  }
+  const sub = card.querySelector('.ex-sub');
+  if(sub) sub.textContent = `${SETS} جلسات × 10 عدة  ·  ${doneSi}/${SETS} مكتمل`;
+
+  // تحديث شبكة الجلسات فقط دون التأثير على الفيديو
+  const setsArea = card.querySelector('.sets-area-wrap');
+  if(setsArea) {
+    setsArea.innerHTML = renderSetsInner(dk, ei);
+  }
+
+  // تحديث شريط التقدم العام لليوم
+  const done = doneCount(dk);
+  const total = totalSets(dk);
+  const pct = total ? Math.round(done/total*100) : 0;
+  const pf = document.getElementById('progressFill');
+  const pp = document.getElementById('progressPct');
+  const pt = document.getElementById('progressText');
+  if(pf) pf.style.width = pct+'%';
+  if(pp) pp.textContent = pct+'%';
+  if(pt) pt.textContent = `${done} / ${total} جلسة مكتملة`;
+
+  renderStrip();
+}
+
+function renderDay() {
+  const day = DAYS[state.activeDay];
+  const dv = document.getElementById('dayView');
+
+  if(day.rest) {
+    document.getElementById('progressWrap').style.display = 'none';
+    dv.innerHTML = `<div class="rest-screen">
+      <div class="rest-big-icon">🌙</div>
+      <h2>يوم راحة</h2>
+      <p>دع عضلاتك تتعافى وتنمو<br>غداً أقوى 💪</p>
+    </div>`;
+    return;
+  }
+
+  document.getElementById('progressWrap').style.display = 'block';
+  const done = doneCount(day.key);
+  const total = totalSets(day.key);
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('progressText').textContent = `${done} / ${total} جلسة مكتملة`;
+
+  let html = '<div class="exercises-list">';
+  day.exercises.forEach((_, ei) => {
+    const name = getExName(day.key, ei);
+    const isOpen = state.openEx === `${day.key}_${ei}`;
+    const allDone = allSetsKey(day.key, ei);
+    const doneSi = [0,1,2].filter(si=>state.sets[setKey(day.key,ei,si)]).length;
+
+    html += `<div class="ex-card${isOpen?' open':''}${allDone?' all-done':''}" id="exc_${day.key}_${ei}">
+      <div class="ex-header" onclick="toggleEx('${day.key}',${ei})">
+        <div class="ex-badge">${allDone ? '✓' : ei+1}</div>
+        <div class="ex-label">
+          <div class="ex-name" title="${name}">${name}</div>
+          <div class="ex-sub">${SETS} جلسات: 10-10-10 عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
+        </div>
+        <div class="ex-arrow">▾</div>
+      </div>`;
+
+    if(isOpen) {
+      html += `<div class="ex-body">
+        ${renderVideoSection(day.key, ei)}
+        <div class="ex-divider"></div>
+        ${renderSets(day.key, ei)}
+      </div>`;
+    }
+    html += `</div>`;
+  });
+  html += '</div>';
+
+  const iconCls = 'day-icon';
+  dv.innerHTML = `
+    <div class="day-header">
+      <div class="${iconCls}">${day.icon}</div>
+      <div>
+        <div class="day-title">${day.name}</div>
+        <div class="day-meta">${day.exercises.length} تمارين · دامبليز فقط</div>
+      </div>
+    </div>
+    ${html}`;
+}
+
+function toggleEx(dk, ei) {
+  const k = `${dk}_${ei}`;
+  state.openEx = state.openEx === k ? null : k;
+  saveState();
+  render();
+}
+
+function renderStrip() {
+  const strip = document.getElementById('weekStrip');
+  strip.innerHTML = DAYS.map((d,i)=>{
+    const done = !d.rest && doneCount(d.key) === totalSets(d.key) && totalSets(d.key) > 0;
+    return `<div class="day-pill${i===state.activeDay?' active':''}${d.rest?' rest-day':''}${done?' done':''}" onclick="switchDay(${i})">
+      <div class="d-short">${d.short}</div>
+      <div class="day-dot"></div>
+    </div>`;
+  }).join('');
+}
+
+function switchDay(i) {
+  state.activeDay = i;
+  state.openEx = null;
+  saveState();
+  render();
+  syncStopwatchForActiveDay();
+}
+
+function render() {
+  renderStrip();
+  renderDay();
+}
+
+function renderKeepScroll() {
+  const y = window.scrollY;
+  render();
+  window.scrollTo(0, y);
+  requestAnimationFrame(()=>{
+    window.scrollTo(0, y);
+    requestAnimationFrame(()=> window.scrollTo(0, y));
+  });
+}
+
+// ===== STICKY WORKOUT STOPWATCH (يبدأ فقط بضغطة المستخدم) =====
+let stopwatchInterval = null;
+
+function fmtTime(totalSec) {
+  const m = Math.floor(totalSec/60);
+  const s = totalSec%60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function isWorkoutStarted(dk) {
+  return !!(state.workoutStart && state.workoutStart[dk]);
+}
+
+function userStartWorkout() {
+  const day = DAYS[state.activeDay];
+  if(!day || day.rest) return;
+  if(!state.workoutStart) state.workoutStart = {};
+  if(!state.workoutEnd) state.workoutEnd = {};
+  delete state.workoutEnd[day.key];
+  state.workoutStart[day.key] = Date.now();
+  saveState();
+  syncStopwatchForActiveDay();
+  render();
+}
+
+function updateStopwatchDisplay() {
+  const day = DAYS[state.activeDay];
+  if(!day || !state.workoutStart || !state.workoutStart[day.key]) return;
+  const endTime = (state.workoutEnd && state.workoutEnd[day.key]) ? state.workoutEnd[day.key] : Date.now();
+  const elapsed = Math.floor((endTime - state.workoutStart[day.key]) / 1000);
+  document.getElementById('stickyTimerTime').textContent = fmtTime(elapsed);
+}
+
+function stopWorkoutStopwatch() {
+  const day = DAYS[state.activeDay];
+  if(!day) return;
+  if(!state.workoutEnd) state.workoutEnd = {};
+  state.workoutEnd[day.key] = Date.now();
+  saveState();
+  updateStopwatchDisplay();
+  if(stopwatchInterval) { clearInterval(stopwatchInterval); stopwatchInterval = null; }
+}
+
+function syncStopwatchForActiveDay() {
+  const day = DAYS[state.activeDay];
+  const wrap = document.getElementById('stickyTimer');
+  const startBtn = document.getElementById('stickyStartBtn');
+  const timeEl = document.getElementById('stickyTimerTime');
+  const labelEl = document.getElementById('stickyTimerLabel');
+  if(stopwatchInterval) { clearInterval(stopwatchInterval); stopwatchInterval = null; }
+
+  if(!day || day.rest) {
+    wrap.classList.remove('show');
+    return;
+  }
+
+  const started = isWorkoutStarted(day.key);
+  const ended = state.workoutEnd && state.workoutEnd[day.key];
+
+  wrap.classList.add('show');
+
+  if(!started) {
+    wrap.classList.add('idle');
+    startBtn.style.display = 'inline-block';
+    timeEl.style.display = 'none';
+    labelEl.textContent = 'وقت التمرين';
+  } else if(started && !ended) {
+    wrap.classList.remove('idle');
+    startBtn.style.display = 'none';
+    timeEl.style.display = 'block';
+    labelEl.textContent = 'وقت التمرين';
+    stopwatchInterval = setInterval(updateStopwatchDisplay, 1000);
+    updateStopwatchDisplay();
+  } else {
+    wrap.classList.remove('idle');
+    startBtn.style.display = 'none';
+    timeEl.style.display = 'block';
+    labelEl.textContent = 'وقت التمرين الكلي';
+    updateStopwatchDisplay();
+  }
+}
+
+render();
+syncStopwatchForActiveDay();
+</script>
+
+<script>
+function showResetConfirm() {
+  document.getElementById('resetConfirm').classList.add('show');
+}
+function hideResetConfirm() {
+  document.getElementById('resetConfirm').classList.remove('show');
+}
+function resetAll() {
+  try { localStorage.removeItem('wb2_state'); } catch(e){}
+  location.reload();
+}
+</script>
+
+
+
+<canvas id="confettiCanvas" style="display:none;"></canvas>
+<div id="celebrationOverlay">
+  <div class="celeb-title" id="celebTitle"><span class="celeb-icon" id="celebIcon">🏆</span> <span class="celeb-title-text" id="celebTitleText">بطل!</span></div>
+  <div class="celeb-sub" id="celebSub">أكملت تمارين اليوم كاملة!</div>
+  <div class="celeb-emoji">🔥💪🎉</div>
+  <button class="celeb-close" onclick="closeCelebration()">شكراً، أنا الأفضل! 😎</button>
+</div>
+
+<script>
+const CELEB_MESSAGES = [
+  { title: 'وحش!', sub: 'ما في أحد مثلك، أكملت اليوم كله!', icon: '🔥' },
+  { title: 'بطل!', sub: 'أسد! أكملت جميع التمارين!', icon: '🏆' },
+  { title: 'أسطورة!', sub: 'الألم مؤقت، الفخر إلى الأبد!', icon: '⚡' },
+  { title: 'وحش حديد!', sub: 'تمرين كامل 100%، ما شاء الله!', icon: '💪' },
+  { title: 'قوة خرافية!', sub: 'أكملت اليوم كله بدون توقف!', icon: '💥' },
+];
+
+function showCelebration(dk) {
+  const msg = CELEB_MESSAGES[Math.floor(Math.random() * CELEB_MESSAGES.length)];
+  document.getElementById('celebIcon').textContent = msg.icon;
+  document.getElementById('celebTitleText').textContent = msg.title;
+  document.getElementById('celebSub').textContent = msg.sub;
+  document.getElementById('celebrationOverlay').classList.add('show');
+  startConfetti();
+}
+
+function closeCelebration() {
+  document.getElementById('celebrationOverlay').classList.remove('show');
+  stopConfetti();
+}
+
+// CONFETTI
+let confettiAnim = null;
+let confettiParticles = [];
+
+function startConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.style.display = 'block';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  confettiParticles = [];
+  const colors = ['#00e5a0','#ffe600','#ff6b35','#ff3cac','#00cfff','#a855f7','#fff'];
+
+  for(let i=0;i<180;i++) {
+    confettiParticles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random()*10+5,
+      h: Math.random()*6+3,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*360,
+      vx: (Math.random()-0.5)*4,
+      vy: Math.random()*4+2,
+      vr: (Math.random()-0.5)*6,
+      shape: Math.random()>0.5?'rect':'circle',
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettiParticles.forEach(p=>{
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillStyle = p.color;
+      if(p.shape==='circle') {
+        ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.fill();
+      } else {
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      }
+      ctx.restore();
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      if(p.y > canvas.height+20) { p.y = -20; p.x = Math.random()*canvas.width; }
+    });
+    confettiAnim = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function stopConfetti() {
+  if(confettiAnim) cancelAnimationFrame(confettiAnim);
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.style.display = 'none';
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+</script>
+</body>
+</html>
