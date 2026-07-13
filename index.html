@@ -307,6 +307,21 @@
     border-radius: 12px;
     font-size: 14px; font-weight: 700; color: var(--accent);
   }
+  .skip-ex-btn {
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    color: var(--accent);
+    font-size: 14px; font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .skip-ex-btn:hover { background: rgba(0,229,160,0.2); border-color: var(--accent); }
 
   /* TIMER WIDGET (حر وقابل للسحب) */
   #timerOverlay {
@@ -907,6 +922,34 @@ function handleSetClick(dk, ei, si) {
   }
 }
 
+function skipExercise(dk, ei) {
+  // علّم كل جلسات هذا التمرين كمكتملة
+  for(let si=0; si<SETS; si++) {
+    state.sets[setKey(dk, ei, si)] = true;
+  }
+  saveState();
+
+  const day = DAYS.find(d=>d.key===dk);
+  const isLastExercise = ei === day.exercises.length - 1;
+
+  if(!isLastExercise) {
+    // انتقل للتمرين التالي مباشرة
+    updateExerciseInPlace(dk, ei);
+    state.openEx = dk + '_' + (ei + 1);
+    saveState();
+    render();
+    setTimeout(()=>{
+      const el = document.getElementById('exc_' + dk + '_' + (ei+1));
+      if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 200);
+  } else {
+    // آخر تمرين — اكتمل اليوم!
+    stopWorkoutStopwatch();
+    render();
+    setTimeout(()=> showCelebration(dk), 500);
+  }
+}
+
 function renderSetsInner(dk, ei) {
   let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
   for(let si=0;si<SETS;si++){
@@ -933,7 +976,9 @@ function renderSetsInner(dk, ei) {
 }
 
 function renderSets(dk, ei) {
-  return `<div class="sets-area-wrap">${renderSetsInner(dk, ei)}</div>`;
+  const allDone = allSetsKey(dk, ei);
+  const skipBtn = allDone ? '' : `<button class="skip-ex-btn" onclick="skipExercise('${dk}',${ei})">انتهيت من التمرين ✓</button>`;
+  return `<div class="sets-area-wrap">${skipBtn}${renderSetsInner(dk, ei)}</div>`;
 }
 
 function isDirectVideo(url) {
@@ -997,7 +1042,9 @@ function updateExerciseInPlace(dk, ei) {
   // تحديث شبكة الجلسات فقط دون التأثير على الفيديو
   const setsArea = card.querySelector('.sets-area-wrap');
   if(setsArea) {
-    setsArea.innerHTML = renderSetsInner(dk, ei);
+    const allDone = allSetsKey(dk, ei);
+    const skipBtn = allDone ? '' : `<button class="skip-ex-btn" onclick="skipExercise('${dk}',${ei})">انتهيت من التمرين ✓</button>`;
+    setsArea.innerHTML = skipBtn + renderSetsInner(dk, ei);
   }
 
   // تحديث شريط التقدم العام لليوم
