@@ -633,7 +633,6 @@
   <header>
     <div class="logo-ring">🏋️</div>
     <h1>جدول تمارين بناء العضل المنزلي</h1>
-    <p>٣ جلسات: 10-10-10 عدة · 45 ثانية راحة</p>
     <button class="quick-reset-btn" onclick="showResetConfirm()">🔄 إعادة التمارين</button>
     <div class="reset-confirm" id="resetConfirm">
       <div>هل أنت متأكد؟ سيتم مسح كل التقدم</div>
@@ -722,6 +721,24 @@ const DAYS = [
 
 const SETS = 3, REPS = [10, 10, 10], REST_SEC = 45;
 
+// وقت الراحة المخصص لكل تمرين (بالثواني)
+const COMPOUND_REST = 90; // تمارين مركبة
+const ISOLATION_REST = 60; // تمارين عزل
+
+function getRestTime(exName) {
+  const compound = [
+    'Flat Dumbbell Bench Press',
+    'Incline Dumbbell Bench Press',
+    'Seated Dumbbell Shoulder Press',
+    'Dumbbell Bent-Over Row',
+    'Single-Arm Dumbbell Row',
+  ];
+  for(const name of compound) {
+    if(exName.includes(name)) return COMPOUND_REST;
+  }
+  return ISOLATION_REST;
+}
+
 function loadState() {
   try { return JSON.parse(localStorage.getItem('wb2_state') || 'null') || {}; } catch(e){ return {}; }
 }
@@ -777,10 +794,10 @@ if(!state.names) state.names = {};
 
 let timerInterval = null, timerCB = null;
 
-function startTimer(cb, nextLabel) {
+function startTimer(cb, nextLabel, duration) {
   if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   timerCB = cb;
-  let sec = REST_SEC;
+  let sec = duration || REST_SEC;
   document.getElementById('timerNum').textContent = sec;
   document.getElementById('timerNext').textContent = nextLabel || '';
   document.getElementById('timerOverlay').classList.add('show');
@@ -901,7 +918,7 @@ function handleSetClick(dk, ei, si) {
   if(!isLastSet) {
     // راحة بين الجلسات - تحديث جزئي بدون إعادة بناء الفيديو
     updateExerciseInPlace(dk, ei);
-    startTimer(()=>{ updateExerciseInPlace(dk, ei); }, `الجلسة ${si+2} من التمرين`);
+    startTimer(()=>{ updateExerciseInPlace(dk, ei); }, `الجلسة ${si+2} من التمرين`, getRestTime(day.exercises[ei]));
   } else if(!isLastExercise) {
     // انتهت جلسات هذا التمرين → راحة ثم انتقال للتمرين التالي
     updateExerciseInPlace(dk, ei);
@@ -913,7 +930,7 @@ function handleSetClick(dk, ei, si) {
         const el = document.getElementById('exc_' + dk + '_' + (ei+1));
         if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
       }, 200);
-    }, 'التمرين التالي 💪');
+    }, 'التمرين التالي 💪', getRestTime(day.exercises[ei]));
   } else {
     // اكتمل اليوم كله!
     stopWorkoutStopwatch();
