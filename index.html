@@ -725,7 +725,7 @@ const SETS = 3, REPS = [10, 10, 10], REST_SEC = 45;
 const COMPOUND_REST = 90; // تمارين مركبة
 const ISOLATION_REST = 60; // تمارين عزل
 
-function getRestTime(exName) {
+function isCompound(exName) {
   const compound = [
     'Flat Dumbbell Bench Press',
     'Incline Dumbbell Bench Press',
@@ -733,10 +733,15 @@ function getRestTime(exName) {
     'Dumbbell Bent-Over Row',
     'Single-Arm Dumbbell Row',
   ];
-  for(const name of compound) {
-    if(exName.includes(name)) return COMPOUND_REST;
-  }
-  return ISOLATION_REST;
+  return compound.some(name => exName.includes(name));
+}
+
+function getRepsLabel(exName) {
+  return isCompound(exName) ? '8–10' : '10–15';
+}
+
+function getRestTime(exName) {
+  return isCompound(exName) ? COMPOUND_REST : ISOLATION_REST;
 }
 
 function loadState() {
@@ -968,6 +973,7 @@ function skipExercise(dk, ei) {
 }
 
 function renderSetsInner(dk, ei) {
+  const exNameForReps = DAYS.find(d=>d.key===dk)?.exercises[ei] || '';
   let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
   for(let si=0;si<SETS;si++){
     const done = state.sets[setKey(dk,ei,si)];
@@ -981,7 +987,7 @@ function renderSetsInner(dk, ei) {
     const statusText = done ? '✓ تمت' : isActive ? 'اضغط' : '🔒';
     html += `<div class="${cls}" onclick="handleSetClick('${dk}',${ei},${si})">
       <div class="tile-num">الجلسة ${si+1}</div>
-      <div class="tile-reps">${REPS[si]}</div>
+      <div class="tile-reps">${getRepsLabel(exNameForReps)}</div>
       <div class="tile-status">${statusText}</div>
     </div>`;
   }
@@ -1054,7 +1060,7 @@ function updateExerciseInPlace(dk, ei) {
     card.classList.toggle('all-done', allDone);
   }
   const sub = card.querySelector('.ex-sub');
-  if(sub) sub.textContent = `${SETS} جلسات × 10 عدة  ·  ${doneSi}/${SETS} مكتمل`;
+  if(sub) sub.textContent = `${SETS} جلسات · ${getRepsLabel(DAYS.find(d=>d.key===dk)?.exercises[ei]||'')} عدة  ·  ${doneSi}/${SETS} مكتمل`;
 
   // تحديث شبكة الجلسات فقط دون التأثير على الفيديو
   const setsArea = card.querySelector('.sets-area-wrap');
@@ -1112,7 +1118,7 @@ function renderDay() {
         <div class="ex-badge">${allDone ? '✓' : ei+1}</div>
         <div class="ex-label">
           <div class="ex-name" title="${name}">${name}</div>
-          <div class="ex-sub">${SETS} جلسات: 10-10-10 عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
+          <div class="ex-sub">${SETS} جلسات · ${getRepsLabel(name)} عدة &nbsp;·&nbsp; ${doneSi}/${SETS} مكتمل</div>
         </div>
         <div class="ex-arrow">▾</div>
       </div>`;
