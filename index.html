@@ -662,23 +662,23 @@ const DAYS = [
     exercises:[
       'Flat Dumbbell Bench Press — الصدر الأوسط',
       'Incline Dumbbell Bench Press — الصدر العلوي',
-      'Resistance Band Chest Fly — عزل الصدر',
-      'Seated Dumbbell Shoulder Press — الكتف الأمامي والجانبي',
+      'Seated Dumbbell Shoulder Press — الكتف الأمامي والكتف الجانبي',
       'Dumbbell Lateral Raise — الكتف الجانبي',
-      'Resistance Band Triceps Pushdown — الرأس الجانبي والإنسي',
-      'Dumbbell Overhead Triceps Extension — الرأس الطويل'
+      'Dumbbell Fly — عزل عضلة الصدر',
+      'Resistance Band Triceps Pushdown — الترايسبس (الرأس الجانبي والرأس الإنسي)',
+      'Dumbbell Overhead Triceps Extension — الترايسبس (الرأس الطويل)'
     ]
   },
   {
     key:'mon', short:'الاثنين', icon:'💪', rest:false,
     name:'الاثنين والخميس — Pull', color:'accent',
     exercises:[
-      'Resistance Band Lat Pulldown — الظهر العريض',
-      'Dumbbell Bent-Over Row — منتصف الظهر + اللاتس',
-      'Chest Supported Dumbbell Row — منتصف الظهر',
-      'Resistance Band Face Pull — الكتف الخلفي + الترابيس العلوية',
+      'Resistance Band Lat Pulldown — العضلة العريضة للظهر (Lats)',
+      'Dumbbell Bent-Over Row — منتصف الظهر + العضلة العريضة للظهر',
+      'Single-Arm Dumbbell Row — منتصف الظهر + العضلات المعينية (Rhomboids)',
+      'Resistance Band Face Pull — الكتف الخلفي',
       'Incline Dumbbell Curl — البايسبس',
-      'Hammer Curl — البايسبس + العضدية + الساعد'
+      'Hammer Curl — البايسبس + العضدية (Brachialis) + العضدية الكعبرية (Brachioradialis)'
     ]
   },
   {
@@ -691,23 +691,23 @@ const DAYS = [
     exercises:[
       'Flat Dumbbell Bench Press — الصدر الأوسط',
       'Incline Dumbbell Bench Press — الصدر العلوي',
-      'Resistance Band Chest Fly — عزل الصدر',
-      'Seated Dumbbell Shoulder Press — الكتف الأمامي والجانبي',
+      'Seated Dumbbell Shoulder Press — الكتف الأمامي والكتف الجانبي',
       'Dumbbell Lateral Raise — الكتف الجانبي',
-      'Resistance Band Triceps Pushdown — الرأس الجانبي والإنسي',
-      'Dumbbell Overhead Triceps Extension — الرأس الطويل'
+      'Dumbbell Fly — عزل عضلة الصدر',
+      'Resistance Band Triceps Pushdown — الترايسبس (الرأس الجانبي والرأس الإنسي)',
+      'Dumbbell Overhead Triceps Extension — الترايسبس (الرأس الطويل)'
     ]
   },
   {
     key:'thu', short:'الخميس', icon:'💪', rest:false,
     name:'الاثنين والخميس — Pull', color:'accent',
     exercises:[
-      'Resistance Band Lat Pulldown — الظهر العريض',
-      'Dumbbell Bent-Over Row — منتصف الظهر + اللاتس',
-      'Chest Supported Dumbbell Row — منتصف الظهر',
-      'Resistance Band Face Pull — الكتف الخلفي + الترابيس العلوية',
+      'Resistance Band Lat Pulldown — العضلة العريضة للظهر (Lats)',
+      'Dumbbell Bent-Over Row — منتصف الظهر + العضلة العريضة للظهر',
+      'Single-Arm Dumbbell Row — منتصف الظهر + العضلات المعينية (Rhomboids)',
+      'Resistance Band Face Pull — الكتف الخلفي',
       'Incline Dumbbell Curl — البايسبس',
-      'Hammer Curl — البايسبس + العضدية + الساعد'
+      'Hammer Curl — البايسبس + العضدية (Brachialis) + العضدية الكعبرية (Brachioradialis)'
     ]
   },
   {
@@ -737,10 +737,10 @@ if(!state.videos) state.videos = {};
 const sunWedVideos = [
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/11.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/2.mov',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/33.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/3.mov',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/55.mp4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/66.MP4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/FIX%20THESE%20Dumbbell%20Chest%20Fly%20.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/105.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Sun_Wen/5.mov',
 ];
 sunWedVideos.forEach((v,i)=>{
@@ -749,9 +749,9 @@ sunWedVideos.forEach((v,i)=>{
 });
 // الاثنين والخميس - نفس التمارين
 const monThuVideos = [
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/77.mp4',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/106.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/88.MP4',
-  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/3.mov',
+  'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/107.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/99.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/100.mp4',
   'https://github.com/alnaif1/tmareen/raw/refs/heads/Mon_thr/6.mov',
