@@ -974,7 +974,8 @@ function skipExercise(dk, ei) {
 
 function renderSetsInner(dk, ei) {
   const exNameForReps = DAYS.find(d=>d.key===dk)?.exercises[ei] || '';
-  let html = '<div class="sets-title">الجلسات (10 - 10 - 10 عدة)</div><div class="sets-row">';
+  const repsLabel = getRepsLabel(exNameForReps);
+  let html = `<div class="sets-title">الجلسات (${repsLabel} عدة)</div><div class="sets-row">`;
   for(let si=0;si<SETS;si++){
     const done = state.sets[setKey(dk,ei,si)];
     const prevDone = si===0 || state.sets[setKey(dk,ei,si-1)];
